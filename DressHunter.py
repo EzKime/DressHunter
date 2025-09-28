@@ -8,7 +8,7 @@ import QtBind
 import json
 
 pName = 'Dress Hunter'
-pVersion = '0.4'
+pVersion = '0.5'
 gui = QtBind.init(__name__, pName)
 
 name=None
@@ -109,18 +109,18 @@ def inventory():
     global freeSlot
     freeSlot = 0
     invData = get_inventory()
-
+    
     if not invData or 'items' not in invData:
         return
-        
+    
     inv = invData['items']
     if len(inv) < 1:
         return
     
+    
     for slot, item in enumerate(inv): 
         if not item and slot > 16:
-            freeSlot += 1
-
+            freeSlot +=1
     QtBind.setText(gui, freeSlo, f"Free Slot: {freeSlot}")
 
 
@@ -173,7 +173,7 @@ def save_current_list():
     save_json(data)
 
 def load_saved_list():
-    global goldSpentm, dropPot
+    global goldSpentm, dropPot, goldSpent
     data = load_json()
     uname = userName()
     update_gold_label()
@@ -213,7 +213,7 @@ def dressWon(name):
 
 
 def drop10xPot(checked):
-    global dropPot, goldSpent
+    global dropPot
     if checked:
         dropPot = True
         log('MP & HP Recovery Potion (X-Large) will be dropped.')
@@ -227,9 +227,7 @@ def drop10xPot(checked):
     uname = userName()
     if uname in data:
         data[uname]["dropPotion"] = dropPot
-        data[uname]["goldSpent"] = goldSpent
         save_json(data)
-        update_gold_label()
         
 
 items = [
@@ -374,7 +372,6 @@ def slotMoonBox(itemId=None):
 
 def openBox():
     global dropPot
-    log(str(dropPot))
     slotmoon = slotMoonBox()
     if slotmoon is None:
         log("Moonlight Box is over.")
@@ -390,7 +387,7 @@ def openBox():
     Timer(1.0, lambda i=item: inject_joymax(0x7680, i, False)).start()
     Timer(1.5, openBox).start() 
     if dropPot:
-        Timer(1.0, log_target_items).start()
+        Timer(1.7, log_target_items).start()
 
 def stop_script():
     global stop
@@ -475,6 +472,7 @@ def handle_joymax(opcode, data):
     global goldSpent
 
     if opcode == 0xB034 and data[1] == 8:
+        log(str(data))
         goldSpent += 20000000
         set_gold(goldSpent)
         QtBind.setText(gui, goldSpnt, f"Gold Spent: {goldSpent:,}".replace(",", "."))
