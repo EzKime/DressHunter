@@ -8,7 +8,7 @@ import QtBind
 import json
 
 pName = 'Dress Hunter'
-pVersion = '0.3'
+pVersion = '0.4'
 gui = QtBind.init(__name__, pName)
 
 name=None
@@ -108,11 +108,20 @@ def userName():
 def inventory():
     global freeSlot
     freeSlot = 0
-    inv = get_inventory()['items']
+    invData = get_inventory()
+
+    if not invData or 'items' not in invData:
+        return
+        
+    inv = invData['items']
+    if len(inv) < 1:
+        return
+    
     for slot, item in enumerate(inv): 
         if not item and slot > 16:
-            freeSlot +=1
-    QtBind.setText(gui, freeSlo, f"Free Slot: {freeSlot}")
+            freeSlot += 1
+
+    QtBind.setText(gui, freeSlotLabel, f"Free Slot: {freeSlot}")
 
 
 
