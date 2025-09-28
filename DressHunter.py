@@ -472,7 +472,6 @@ def handle_joymax(opcode, data):
     global goldSpent
 
     if opcode == 0xB034 and data[1] == 8:
-        log(str(data))
         goldSpent += 20000000
         set_gold(goldSpent)
         QtBind.setText(gui, goldSpnt, f"Gold Spent: {goldSpent:,}".replace(",", "."))
