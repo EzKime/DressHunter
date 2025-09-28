@@ -121,7 +121,7 @@ def inventory():
         if not item and slot > 16:
             freeSlot += 1
 
-    QtBind.setText(gui, freeSlotLabel, f"Free Slot: {freeSlot}")
+    QtBind.setText(gui, freeSlo, f"Free Slot: {freeSlot}")
 
 
 
